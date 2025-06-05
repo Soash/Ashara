@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Report</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align: center">
+        <h2>আশারা প্রকল্প</h2>
+        <h4>সুদমুক্ত বাণিজ্যিক প্রকল্প</h4>
+        <span style="background: black;color: white;padding: 5px 15px;border-radius: 50px;">স্থায়ী কার্যালয়</span>
+        <p>নদীপার, খিলগাঁও, ঢাকা-১২১৯</p>
+    </div>
+
+    {% if customers %}
+    <h3 style="text-align: center;">Account Report</h3>
+    <h4 style="text-align: center;">Date: {{ start_date }} to {{end_date}}</h4>
+    <table style="margin-top: 20px;">
+        <thead>
+            <tr>
+                <th>SL</th>
+
+                <th>Account No</th>
+                <th>Customer Name</th>
+
+                <th>Address</th>
+                <th>Mobile</th>
+                <th>Joining Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                
+                <td>{{ customer.account_number }}</td>
+                <td>{{ customer.customer_name }}</td>
+                    
+                <td>{{ customer.customer_current_address }}</td>
+                <td>{{ customer.customer_mobile }}</td>
+                <td>{{ customer.joining_date|date:"d-M-Y" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div style="margin-top: 20px;display: flex;justify-content: space-between;">
+        <p>Prepared by: _____________________</p>
+        <p>Approved by: _____________________</p>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;" class="no-print">
+        <button onclick="window.history.back();">Go Back</button>
+        <button onclick="window.print();">Print</button>
+        <button onclick="window.location.href='{% url 'home' %}';">Home</button>
+    </div>
+    {% endif %}
+
+    <form method="post" class="no-print">
+        {% csrf_token %}
+        <div>
+            {{ form.as_p }}
+        </div>
+        <button type="submit">Generate Report</button>
+    </form>
+    <button onclick="window.location.href='{% url 'home' %}';" style="margin-top: 5px;">Home</button>
+</body>
+</html>

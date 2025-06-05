@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% block title %}General AC Transaction History{% endblock %}
+{% block style_links %}
+<style>
+.somity-info > * {
+    margin: 10px 0;
+}
+#general-transaction {
+  margin: 25px;
+}
+#general-transaction h2 {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+h2, h4, p, span {
+    margin: 0;
+    padding: 0;
+}
+span {
+    display: inline-block;
+}
+.table-container {
+    margin-bottom: 30px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+table, th, td {
+    border: 1px solid #000;
+}
+th, td {
+    padding: 10px;
+    text-align: left;
+    font-size: 14px;
+}
+th {
+    background-color: #f2f2f2;
+}
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 15px;
+}
+button:hover {
+    background-color: #45a049;
+}
+#print-button {
+    background-color: #007bff;
+    margin-top: 20px;
+    font-size: 16px;
+}
+#print-button:hover {
+    background-color: #0056b3;
+}
+/* FontAwesome icons (basic inline styles since external fa link is removed) */
+.fa-solid {
+    font-style: normal;
+    font-weight: bold;
+}
+.fa-plus::before {
+    content: "+";
+    color: green;
+}
+.fa-minus::before {
+    content: "-";
+    color: red;
+}
+/* Print styles */
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+    #general-transaction, #general-transaction * {
+        visibility: visible !important;
+    }
+    #general-transaction {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    #print-button {
+        display: none !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="general-transaction">
+
+    <div style="text-align: center" class="somity-info">
+        <h2>আশারা প্রকল্প</h2>
+        <h4>সুদমুক্ত বাণিজ্যিক প্রকল্প</h4>
+        <span style="background: black;color: white;padding: 5px 15px;border-radius: 50px;">স্থায়ী কার্যালয়</span>
+        <p>নদীপার, খিলগাঁও, ঢাকা-১২১৯</p>
+    </div>
+
+    <h2 style="text-align: center; margin-top: 50px;">General AC Transaction History</h2>
+
+    <div class="table-container">
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>Account No</th>
+                    <th>Customer Name</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ data.customer.account_number }}</td>
+                    <td>{{ data.customer.customer_name }}</td>
+                    <td>{{ data.balance }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Month</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.date|date:"Y-m-d" }}</td>
+                <td>{{ transaction.get_transaction_type_display }}</td>
+                <td>
+                    {% if transaction.transaction_type == 'deposit' %}
+                        <i class="fa-solid fa-plus"></i>
+                    {% else %}
+                        <i class="fa-solid fa-minus"></i>
+                    {% endif %}
+                    {{ transaction.amount }}
+                </td>
+                <td>{{ transaction.month_note|default:"" }}</td>
+                <td>{{ transaction.purpose_note|default:"" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<button id="print-button" onclick="printDiv()">Print</button>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function printDiv() {
+        window.print();
+    }
+</script>
+{% endblock %}

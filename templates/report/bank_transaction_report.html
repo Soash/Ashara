@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bank Statement</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+            width: 200px;
+            gap: 5px;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div style="text-align: center">
+        <h2>আশারা প্রকল্প</h2>
+        <h4>সুদমুক্ত বাণিজ্যিক প্রকল্প</h4>
+        <span style="background: black;color: white;padding: 5px 15px;border-radius: 50px;">স্থায়ী কার্যালয়</span>
+        <p>নদীপার, খিলগাঁও, ঢাকা-১২১৯</p>
+    </div>
+
+
+<!-- Bank Balances Table -->
+<br><br>
+<span><b>Bank Balances Table</b></span>
+<table>
+    <thead>
+        <tr>
+            <th>Bank</th>
+            <th>Current Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for b in banks %}
+            <tr>
+                <td>{{ b.bank_name }}</td>
+                <td>{{ b.balance }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td>Total</td>
+            <td>{{total_balance}}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<!-- Transactions Table -->
+{% if transactions %}
+<br><br><br>
+<span><b>Transactions Table</b></span>
+<div>
+    {% if bank %}
+        <span>Bank: {{ bank.bank_name }}</span>
+    {% else %}
+        <span>Bank: All Banks</span>
+    {% endif %}
+    <br>
+    {% if start_date %}
+    <span>Date: {{ start_date }} - {{ end_date }}</span>
+    {% endif %}
+</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Bank Name</th>
+                <th>Deposit</th>
+                <th>Withdraw</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.date|date:"Y-m-d" }}</td>
+                    <td>{{ transaction.bank.bank_name }}</td>
+                    {% if transaction.transaction_type == 'deposit' %}
+                        <td>{{ transaction.amount }}</td>
+                        <td></td>
+                    {% else %}
+                        <td></td>
+                        <td>{{ transaction.amount }}</td>
+                    {% endif %}
+                    <td>{{ transaction.note|default:"" }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="2" style="text-align: right">Total</td>
+                <td>{{ total_deposit|floatformat:"2" }}</td>
+                <td>{{ total_withdraw|floatformat:"2" }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: right">Net Balance</td>
+                <td colspan="3">{{ net_balance|floatformat:"2" }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+{% elif error %}
+    <p>{{ error }}</p>
+{% endif %}
+
+
+<div style="text-align: center; margin-top: 20px;" class="no-print">
+  <button onclick="window.history.back();">Go Back</button>
+  <button onclick="window.print();">Print</button>
+  <button onclick="window.location.href='{% url 'home' %}';">home</button>
+</div>
+
+<!-- Transactions Table -->
+<form method="post" class="no-print">
+    {% csrf_token %}
+    <span><b>Generate Transactions Table</b></span>
+  <label for="start_date">Start Date:</label>
+  <input type="date" id="start_date" name="start_date" required>
+
+  <label for="end_date">End Date:</label>
+  <input type="date" id="end_date" name="end_date" required>
+
+  <label for="bank">Bank:</label>
+  <select id="bank" name="bank" required>
+      <option value="all">All Banks</option>
+      {% for bank in banks %}
+          <option value="{{ bank.id }}">{{ bank.bank_name }}</option>
+      {% endfor %}
+  </select>
+
+  <button type="submit">View Transactions</button>
+</form>
+
+
+</body>
+</html>

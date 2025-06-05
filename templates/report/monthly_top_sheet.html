@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+{% load custom_filters %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        h1, h2 {
+            color: #333;
+        }
+        
+        form {
+            display: flex;
+            gap: 20px;
+        }
+        
+        label {
+            font-weight: bold;
+        }
+        
+        select, button {
+            padding: 5px 10px;
+        }
+        button {
+            background-color: #0951a2;;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background: white;
+        }
+        
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        
+        td {
+            padding: 8px;
+            text-align: center;
+        }
+        
+        td:first-child, td:nth-child(2) {
+            font-weight: bold;
+            background-color: #f2f2f2;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body id="main">
+
+    <div style="text-align: center">
+        <h2>আশারা প্রকল্প</h2>
+        <h4>সুদমুক্ত বাণিজ্যিক প্রকল্প</h4>
+        <span style="background: black;color: white;padding: 5px 15px;border-radius: 50px;">স্থায়ী কার্যালয়</span>
+        <p>নদীপার, খিলগাঁও, ঢাকা-১২১৯</p>
+    </div>
+
+
+    <h2 style="text-align: center; margin-top: 50px;">মাসিক হিসাব</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><button type="submit" class="no-print">Submit</button></p>
+    </form>
+
+    {% if dates %}
+    <h2>Debit</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>SL</th>
+                <th>Account</th>
+                {% for date in dates %}
+                    <th>{% split_date date %}</th>
+                {% endfor %}
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tr>
+            <td>1</td>
+            <td>General AC Deposit</td>
+            {% for date in dates %}
+                <td>{% total_amount_on_date date "general" "debit" %}</td>
+            {% endfor %}
+            <td>{% total_amount_on_month selected_month selected_year "general" "debit" %}</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Savings AC Deposit</td>
+            {% for date in dates %}
+                <td>{% total_amount_on_date date "savings" "debit" %}</td>
+            {% endfor %}
+            <td>{% total_amount_on_month selected_month selected_year "savings" "debit" %}</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>DPS AC Deposit</td>
+            {% for date in dates %}
+                <td>{% total_amount_on_date date "dps" "debit" %}</td>
+            {% endfor %}
+            <td>{% total_amount_on_month selected_month selected_year "dps" "debit" %}</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Share AC Deposit</td>
+            {% for date in dates %}
+                <td>{% total_amount_on_date date "share" "debit" %}</td>
+            {% endfor %}
+            <td>{% total_amount_on_month selected_month selected_year "share" "debit" %}</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Bank AC Withdraw</td>
+            {% for date in dates %}
+                <td>{% total_amount_on_date date "bank" "debit" %}</td>
+            {% endfor %}
+            <td>{% total_amount_on_month selected_month selected_year "bank" "debit" %}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Total</td>
+            {% for date in dates %}
+                <td>{% grand_total_on_date date "debit" %}</td>
+            {% endfor %}
+            {% grand_total_on_month selected_month selected_year "debit" as net_debit %}
+            <td>{{ net_debit }}</td>
+        </tr>
+    </table>
+
+    <h2>Credit</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>SL</th>
+                <th>Account</th>
+                {% for date in dates %}
+                    <th>{% split_date date %}</th>
+                {% endfor %}
+                <th>Total</th>
+            </tr>
+        </thead>
+
+        <tr>
+            <td>1</td>
+            <td>General AC Withdraw</td>
+            {% for date in dates %}
+                <td>{% total_amount_on_date date "general" "credit" %}</td>
+            {% endfor %}
+            <td>{% total_amount_on_month selected_month selected_year "general" "credit" %}</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Savings AC Withdraw</td>
+            {% for date in dates %}
+                <td>{% total_amount_on_date date "savings" "credit" %}</td>
+            {% endfor %}
+            <td>{% total_amount_on_month selected_month selected_year "savings" "credit" %}</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>DPS AC Withdraw</td>
+            {% for date in dates %}
+                <td>{% total_amount_on_date date "dps" "credit" %}</td>
+            {% endfor %}
+            <td>{% total_amount_on_month selected_month selected_year "dps" "credit" %}</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Share AC Withdraw</td>
+            {% for date in dates %}
+                <td>{% total_amount_on_date date "share" "credit" %}</td>
+            {% endfor %}
+            <td>{% total_amount_on_month selected_month selected_year "share" "credit" %}</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Bank AC Deposit</td>
+            {% for date in dates %}
+                <td>{% total_amount_on_date date "bank" "credit" %}</td>
+            {% endfor %}
+            <td>{% total_amount_on_month selected_month selected_year "bank" "credit" %}</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>Voucher</td>
+            {% for date in dates %}
+                <td>{% total_amount_on_date date "voucher" "credit" %}</td>
+            {% endfor %}
+            <td>{% total_amount_on_month selected_month selected_year "voucher" "credit" %}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Total</td>
+            {% for date in dates %}
+                <td>{% grand_total_on_date date "credit" %}</td>
+            {% endfor %}
+            {% grand_total_on_month selected_month selected_year "credit" as net_credit %}
+            <td>{{ net_credit }}</td>
+        </tr>
+    </table>
+
+    <h2>Net Asset: {% sub net_debit net_credit %}</h2>
+    {% endif %}
+
+    <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+        <p>Prepared by: _____________________</p>
+        <p>Approved by: _____________________</p>
+    </div>
+
+    <button style="padding: 10px;" onclick="printDiv('main')" class="no-print">Print</button>
+    <button style="padding: 10px;" class="no-print" onclick="window.location.href='/'">Home</button>
+
+    <script>
+        function printDiv(divId) {
+            var printContent = document.getElementById(divId).innerHTML;
+            var originalContent = document.body.innerHTML;
+    
+            document.body.innerHTML = printContent;
+    
+            window.print();
+    
+            document.body.innerHTML = originalContent;
+        }
+    </script>
+
+</body>
+</html>

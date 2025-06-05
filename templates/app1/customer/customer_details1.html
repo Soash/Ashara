@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Customer Details{% endblock %}
+{% block style_links %}
+<link rel="stylesheet" href="{% static 'app1/customer_add2.css' %}">
+<style>
+.main{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+<div id="details">
+
+    <div class="header">
+
+        <div class="info" style="text-align: center;">
+            <h2 style="border: none; color: black;">আশারা প্রকল্প</h2>
+            <h4>সুদমুক্ত বাণিজ্যিক প্রকল্প</h4>
+            <h4 style="background: black;color: white;padding: 5px;border-radius: 50px;">স্থায়ী কার্যালয়</h4>
+            <p>নদীপার, খিলগাঁও, ঢাকা-১২১৯</p>
+        </div>
+
+        <div class="uploader uploader1-pos">
+            {% if customer.customer_photo %}
+                <img src="{{ customer.customer_photo.url }}" style="display: block;">
+            {% else %}
+                <img src="#" style="display: block;">
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="form-section mt-4">
+        <h3 class="text-center mb-4 text-decoration-underline">সদস্য ফরম</h3>
+        
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">তারিখঃ</label>
+                <input type="text" name="joining_date" class="form-control" required="" id="id_joining_date" value="{{ customer.joining_date }}" readonly="">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">হিসাব নংঃ</label>
+                <input type="text" name="account_number" class="form-control" maxlength="50" required="" id="id_account_number" value="{{ customer.account_number }}" readonly="">
+            </div>
+        </div>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">সদস্যের নামঃ</label>
+                <input type="text" name="customer_name" class="form-control" maxlength="100" id="id_customer_name" value="{{ customer.customer_name }}" readonly="">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">সদস্যের মোবাইল নংঃ</label>
+                <input type="text" name="customer_mobile" class="form-control" maxlength="11" id="id_customer_mobile" value="{{ customer.customer_mobile }}" readonly="">
+            </div>
+           
+        </div>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">পিতার নামঃ</label>
+                <input type="text" name="customer_father" class="form-control" maxlength="100" id="id_customer_name" value="{{ customer.customer_father }}" readonly="">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">মাতার নামঃ</label>
+                <input type="text" name="customer_mother" class="form-control" maxlength="100" id="id_customer_mother" value="{{ customer.customer_mother }}" readonly="">
+            </div>
+   
+        </div>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">বর্তমান ঠিকানাঃ</label>
+                <textarea name="customer_current_address" cols="40" rows="2" class="form-control" id="id_customer_current_address" value="" readonly="">{{ customer.customer_current_address }}</textarea>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">স্থায়ী ঠিকানাঃ</label>
+                <textarea name="customer_permanent_address" cols="40" rows="2" class="form-control" id="id_customer_permanent_address" value="" readonly="">{{ customer.customer_permanent_address }}</textarea>
+            </div>
+            
+        </div>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">জাতীয় পরিচয়পত্র / জন্মনিবন্ধন নাম্বারঃ</label>
+                <input type="text" name="customer_nid" class="form-control" maxlength="20" id="id_customer_nid" value="{{ customer.customer_nid }}" readonly="">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">শেয়ার সংখ্যাঃ</label>
+                <input type="text" name="share_count" class="form-control" min="0" id="id_share_count" value="{{ customer.share_count }}" readonly="">
+            </div>
+        </div>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">মাধ্যমকারীর নামঃ</label>
+                <input type="text" name="mediator_name" class="form-control" maxlength="100" id="id_mediator_name" value="{{ customer.mediator_name }}" readonly="">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">শুপারিশকারীর নামঃ</label>
+                <input type="text" name="recommender_name" class="form-control" maxlength="100" id="id_recommender_name" value="{{ customer.recommender_name }}" readonly="">
+            </div>
+        </div>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">শুপারিশকারীর সম্পর্কঃ</label>
+                <input type="text" name="recommender_relation" class="form-control" maxlength="100" id="id_recommender_relation" value="{{ customer.recommender_relation }}" readonly="">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">শুপারিশকারীর মোবাইল নংঃ</label>
+                <input type="text" name="recommender_mobile" class="form-control" maxlength="11" id="id_recommender_mobile" value="{{ customer.recommender_mobile }}" readonly="">
+            </div>
+        </div>
+        <div class="row g-3 mt-2">
+            <div class="col-md-6 mt-2">
+                {% if customer.customer_signature %}
+                    <img src="{{ customer.customer_signature.url }}" style="display: block; width: 25%;">
+                {% else %}
+                    <img src="#" style="display: block;">
+                {% endif %}
+                <label class="form-label">সদস্যের স্বাক্ষর</label>
+   
+            </div>
+            <div class="col-md-6 mt-2">
+                {% if customer.recommender_signature %}
+                    <img src="{{ customer.recommender_signature.url }}" style="display: block; width: 25%;">
+                {% else %}
+                    <img src="#" style="display: block;">
+                {% endif %}
+                <label class="form-label">শুপারিশকারীর স্বাক্ষর</label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-section">
+        <h3 class="text-center mb-4 text-decoration-underline">নমিনীর পরিচিতি</h3>
+        <div class="row g-3 mt-2">
+            <div class="col">
+                <div class="form-label mt-2">
+                    <label>নমিনীর নামঃ</label>
+                    <input type="text" name="nominee_name" class="form-control" maxlength="100" id="id_nominee_name" value="{{ customer.nominee_name }}" readonly="">
+                </div>
+                <div class="form-label mt-2">
+                    <label>পিতার নামঃ</label>
+                    <input type="text" name="nominee_father" class="form-control" maxlength="100" id="id_nominee_father" value="{{ customer.nominee_father }}" readonly="">
+                </div>
+                <div class="form-label mt-2">
+                    <label>মাতার নামঃ</label>
+                    <input type="text" name="nominee_mother" class="form-control" maxlength="100" id="id_nominee_mother" value="{{ customer.nominee_mother }}" readonly="">
+                </div>
+                <div class="form-label mt-2">
+                    <label>সদস্যের সাথে সম্পর্কঃ</label>
+                    <input type="text" name="nominee_relation" class="form-control" maxlength="100" id="id_nominee_relation" value="{{ customer.nominee_relation }}" readonly="">
+                </div>
+                <div class="form-label mt-2">
+                    <label>বর্তমান ঠিকানাঃ</label>
+                    <textarea name="nominee_current_address" cols="40" rows="2" class="form-control" id="id_nominee_current_address" value="" readonly="">{{ customer.nominee_current_address }}</textarea>
+                </div>
+                <div class="form-label mt-2">
+                    <label>স্থায়ী ঠিকানাঃ</label>
+                    <textarea name="nominee_permanent_address" cols="40" rows="2" class="form-control" id="id_nominee_permanent_address" value="" readonly="">{{ customer.nominee_permanent_address }}</textarea>
+                </div>
+                <div class="form-label mt-2">
+                    <label>মোবাইল নংঃ</label>
+                    <input type="text" name="nominee_mobile" class="form-control" maxlength="15" id="id_nominee_mobile" value="{{ customer.nominee_mobile }}" readonly="">
+                </div>
+                <div class="form-label mt-2">
+                    <label>জাতীয় পরিচয়পত্র / জন্মনিবন্ধন নাম্বারঃ</label>
+                    <input type="text" name="nominee_nid" class="form-control" maxlength="20" id="id_nominee_nid" value="{{ customer.nominee_nid }}" readonly="">
+                </div>
+            </div>
+            <div class="col nomini-photo">
+                <div class="uploader">
+                    {% if customer.nominee_photo %}
+                        <img src="{{ customer.nominee_photo.url }}" style="display: block;">
+                    {% else %}
+                        <img src="#" style="display: block;">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row g-3 mt-2">
+            <div class="col-md-6 mt-2">
+                {% if customer.nominee_signature %}
+                    <img src="{{ customer.nominee_signature.url }}" style="display: block; width: 25%;">
+                {% else %}
+                    <img src="#" style="display: block;">
+                {% endif %}
+          
+                <label class="form-label">নমিনীর স্বাক্ষর</label>
+            </div>
+            <div class="col-md-6 mt-2">
+                {% if customer.president_signature %}
+                    <img src="{{ customer.president_signature.url }}" style="display: block; width: 25%;">
+                {% else %}
+                    <img src="#" style="display: block;">
+                {% endif %}
+
+                <label class="form-label">সভাপতির স্বাক্ষর</label>
+            </div>
+        </div>
+    </div>
+ 
+</div>
+
+   <div style="text-align: center;margin: 20px;">
+        <button style="padding: 10px;" onclick="printDiv('details')">প্রিন্ট করুন</button>
+        <a href="{% url 'customer_edit' customer.id %}">
+            <button style="padding: 10px;">এডিট করুন</button>
+        </a>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function printDiv(divId) {
+        var printContent = document.getElementById(divId).innerHTML;
+        var originalContent = document.body.innerHTML;
+
+        document.body.innerHTML = printContent;
+
+        window.print();
+
+        document.body.innerHTML = originalContent;
+    }
+</script>
+{% endblock %}

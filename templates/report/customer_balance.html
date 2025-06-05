@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Customer Balance{% endblock %}
+
+{% block style_links %}
+<link rel="stylesheet" href="{% static 'app1/customer_details.css' %}">
+<link rel="stylesheet" href="{% static 'report/customer_balance.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<h2 class="section-title">Customer Balance</h2>
+
+<div class="div1">
+    <table>
+        <tr>
+            <th>Account No.</th>
+            <td>{{ customer.account_number }}</td>
+        </tr>
+        <tr>
+            <th>Customer Name</th>
+            <td>{{ customer.customer_name }}</td>
+        </tr>
+        <tr>
+            <th>Father</th>
+            <td>{{ customer.customer_father }}</td>
+        </tr>
+        <tr>
+            <th>Mother</th>
+            <td>{{ customer.customer_mother }}</td>
+        </tr>
+        <tr>
+            <th>Mobile Number</th>
+            <td>{{ customer.customer_mobile }}</td>
+        </tr>
+        <tr>
+            <th>Current Address</th>
+            <td>{{ customer.customer_current_address }}</td>
+        </tr>
+        <tr>
+            <th>Permanent Address</th>
+            <td>{{ customer.customer_permanent_address }}</td>
+        </tr>
+    </table>
+    
+    <div class="img-container">
+        {% if customer.customer_photo %}
+        <div>
+            <img src="{{ customer.customer_photo.url }}" class="centered-image">
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+
+<div class="balance-summary">
+    <div class="balance-box">
+        <h3>General AC Balance</h3>
+        <p>TK <strong>{{ general_savings|floatformat:2 }}</strong></p>
+    </div>
+    <div class="balance-box">
+        <h3>Savings AC Balance</h3>
+        <p>TK <strong>{{ special_savings|default:"0.00"|floatformat:2 }}</strong></p>
+    </div>
+    <div class="balance-box">
+        <h3>DPS AC Balance</h3>
+        <p>TK <strong>{{ dps_balance|floatformat:2 }}</strong></p>
+    </div>
+    <div class="balance-box">
+        <h3>Share AC Balance</h3>
+        <p>TK <strong>{{ share_balance|floatformat:2 }}</strong></p>
+    </div>
+</div>
+
+
+
+{% endblock %}

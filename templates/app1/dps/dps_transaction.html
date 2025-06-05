@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}DPS Transactions{% endblock %}
+{% block style_links %}
+<link rel="stylesheet" href="{% static 'app1/general.css' %}">
+{% endblock %}
+{% block content %}
+
+<h2>DPS AC Transaction History</h2>
+
+
+
+<div class="table-container1" style="display: flex; gap: 25px; margin: 20px 0;">
+
+  <table>
+      <tr>
+          <td>DPS Scheme</td>
+          <td>{{ dps.dps_scheme }}</td>
+      </tr>
+      <tr>
+          <td>Account No</td>
+          <td>{{ dps.customer.account_number }}</td>
+      </tr>
+      <tr>
+          <td>Customer Name</td>
+          <td>{{ dps.customer.customer_name }}</td>
+      </tr>
+      <tr>
+          <td>Start Date</td>
+          <td>{{ dps.start_date }}</td>
+      </tr>
+      <tr>
+          <td>End Date</td>
+          <td>{{ dps.end_date }}</td>
+      </tr>
+      <tr>
+          <td>Profit</td>
+          <td>{{ dps.profit_percent }}%</td>
+      </tr>
+  </table>
+  <table>
+      <tr>
+          <td>Installments</td>
+          <td>{{dps.paid_installments}}/{{ dps.number_of_installments }}</td>
+      </tr>
+      <tr>
+          <td>Installment Amount</td>
+          <td>{{ dps.amount_per_installments }}</td>
+      </tr>
+      <tr>
+          <td>Total Amount</td>
+          <td>{{ dps.total_amount }}</td>
+      </tr>
+      <tr>
+          <td>Balance</td>
+          <td>{{ dps.balance }}</td>
+      </tr>
+      <tr>
+          <td>Status</td>
+          <td>{{ dps.get_status_display }}</td>
+      </tr>
+      <tr>
+          <td>-</td>
+          <td>-</td>
+      </tr>
+  </table>
+</div>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>TrxID</th>
+      <th>Date</th>
+      <th>Type</th>
+      <th>Amount</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for transaction in transactions %}
+    <tr>
+      <td>{{ transaction.VoucherID }}</td>
+      <td>{{ transaction.date|date:"Y-m-d" }}</td>
+      <td>{{ transaction.get_transaction_type_display }}</td>
+      <td>
+        {% if transaction.transaction_type == 'deposit' %}<i class="fa-solid fa-plus" style="color: green"></i>
+        {% else %}<i class="fa-solid fa-minus" style="color: red"></i>
+        {% endif %}
+        {{ transaction.amount }}
+      </td>
+      <td>{{ transaction.note|default:"" }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+
+</table>
+
+{% endblock %}

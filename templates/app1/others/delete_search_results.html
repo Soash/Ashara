@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}Delete Account{% endblock %}
+{% block style_links %}
+<link rel="stylesheet" href="{% static 'app1/customer_details.css' %}">
+<style>
+    .account-section {
+        margin-bottom: 20px;
+    }
+    .account-section h2 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-size: 24px;
+    }
+    .account-section table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    .account-section table th, .account-section table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+    .account-section table th {
+        background-color: #f2f2f2;
+    }
+    .action-link {
+        color: red;
+        text-decoration: none;
+    }
+    .action-link:hover {
+        text-decoration: underline;
+    }
+    .trans-btn {
+        color: white;
+        text-decoration: none;
+        padding: 3px 10px;
+        margin: 3px;
+        display: inline-block;
+        border-radius: 25px;
+    }
+    .withdraw-btn {
+        background: red;
+    }
+    .trans-his-btn {
+        background: black;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>Customer Details</h2>
+<div class="div1">
+        <table>
+            <tr>
+                <th>Account No</th>
+                <td>{{ customer.account_number }}</td>
+            </tr>
+            <tr>
+                <th>Customer Name</th>
+                <td>{{ customer.customer_name }}</td>
+            </tr>
+            <tr>
+                <th>Father</th>
+                <td>{{ customer.customer_father }}</td>
+            </tr>
+            <tr>
+                <th>Mother</th>
+                <td>{{ customer.customer_mother }}</td>
+            </tr>
+            <tr>
+                <th>Mobile Number</th>
+                <td>{{ customer.customer_mobile }}</td>
+            </tr>
+            <tr>
+                <th>Current Address</th>
+                <td>{{ customer.customer_current_address}}</td>
+            </tr>
+            <tr>
+                <th>Permanent Address</th>
+                <td>{{ customer.customer_permanent_address }}</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">
+                    <a href="{% url 'general_transaction_history' general.id %}" class="trans-btn trans-his-btn">General AC Transaction History</a>
+                </td>
+                <td>
+                    <a href="{% url 'savings_transaction_history' savings.id %}" class="trans-btn trans-his-btn">Savings AC Transaction History</a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <b><a href="{% url 'delete_customer' customer.id %}" class="trans-btn withdraw-btn" onclick="return confirm('Are you sure you want to delete this Customer?');">Delete</a></b>
+                </td>
+            </tr>
+        </table>
+        <div class="img-container">
+            {% if customer.customer_photo %}
+            <div>
+                <img src="{{ customer.customer_photo.url }}" class="centered-image">
+            </div>
+            {% endif %}
+        </div>
+ 
+</div>
+
+{% if dpss or shares %}
+    <div class="account-section">
+        {% if dpss %}
+            <h2>DPS</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Scheme</th>
+                        <th>Amount per Installment</th>
+                        <th>Installments</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dps in dpss %}
+                        <tr>
+                            <td><a href="{% url 'dps_delete' dps.id %}" class="trans-btn withdraw-btn" onclick="return confirm('Are you sure you want to delete this DPS?');">Delete</a>
+                                <br><a href="{% url 'dps_transaction' dps.id %}" class="trans-btn trans-his-btn">Transactions</a>
+                            </td>
+                            <td>{{ dps.dps_scheme.scheme_name }}</td>
+                            <td>{{ dps.amount_per_installments }}</td>
+                            <td>{{ dps.number_of_installments }}</td>
+                            <td>{{ dps.total_amount }}</td>
+                            <td>{{ dps.get_status_display }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        {% if shares %}
+            <h2>Shares</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Share ID</th>
+                        <th>Customer</th>
+                        <th>Balance</th>
+                        <th>Nominee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for share in shares %}
+                        <tr>
+                            <td><a href="{% url 'share_delete' share.share_id %}" class="trans-btn withdraw-btn" onclick="return confirm('Are you sure you want to delete this share?');">Delete</a>
+                                <br><a href="{% url 'share_transaction_history' share.share_id %}" class="trans-btn trans-his-btn">Transactions</a>
+                            </td>
+                            <td>{{ share.share_id }}</td>
+                            <td>{{ share.customer }}</td>
+                            <td>{{ share.balance }}</td>
+                            <td>{{ share.nominee }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% else %}
+    <p></p>
+{% endif %}
+{% endblock %}

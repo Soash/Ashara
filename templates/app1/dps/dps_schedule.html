@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}DPS Schedule{% endblock %}
+{% block style_links %}
+<link rel="stylesheet" href="{% static 'app1/dps.css' %}">
+<link rel="stylesheet" href="{% static 'app1/general.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <h2>DPS Schedule</h2>
+
+    
+    <div class="table-container1" style="display: flex; gap: 25px; margin: 20px 0;">
+
+        <table>
+            <tr>
+                <td>DPS Scheme</td>
+                <td>{{ dps.dps_scheme }}</td>
+            </tr>
+            <tr>
+                <td>Account No</td>
+                <td>{{ dps.customer.account_number }}</td>
+            </tr>
+            <tr>
+                <td>Customer Name</td>
+                <td>{{ dps.customer.customer_name }}</td>
+            </tr>
+            <tr>
+                <td>Start Date</td>
+                <td>{{ dps.start_date }}</td>
+            </tr>
+            <tr>
+                <td>End Date</td>
+                <td>{{ dps.end_date }}</td>
+            </tr>
+            <tr>
+                <td>Profit</td>
+                <td>{{ dps.profit_percent }}%</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>Installments</td>
+                <td>{{dps.paid_installments}}/{{ dps.number_of_installments }}</td>
+            </tr>
+            <tr>
+                <td>Installment Amount</td>
+                <td>{{ dps.amount_per_installments }}</td>
+            </tr>
+            <tr>
+                <td>Total Amount</td>
+                <td>{{ dps.total_amount }}</td>
+            </tr>
+            <tr>
+                <td>Balance</td>
+                <td>{{ dps.balance }}</td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td>{{ dps.get_status_display }}</td>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+    </div>
+    
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>SL</th>
+                    <th>Date</th>
+                    <th>Installment Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+    
+                {% for schedule in schedules %}
+                    {% if schedule.is_skipped %}
+                    <tr>
+                        <td colspan="4" style="text-align: center">
+                            {% if schedule.skipped_due_date in holidays %}
+                                Holiday: {{ schedule.skipped_due_date }}
+                            {% else %}
+                                Weekend: {{ schedule.skipped_due_date }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endif %}
+
+
+                    {% if schedule.installment_status == 'due' %}
+                        <tr style="background: red;">
+                    {% elif schedule.installment_status == 'paid' %}
+                        <tr style="background: green;">
+                    {% else %}
+                        <tr>
+                    {% endif %}
+                        <td>{{ schedule.installment_number }}</td>
+                        <td>{{ schedule.due_date }}</td>
+            
+                        <td>{{ schedule.amount }} tk</td>
+                        <td>{{ schedule.installment_status }}</td>
+                                    
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

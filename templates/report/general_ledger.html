@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}General Ledger{% endblock %}
+{% block style_links %}
+<style>
+    .main {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin: 0 auto;
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+    }
+    form {
+        margin: 20px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    form p{
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    .form-control {
+        padding: 8px;
+        margin: 5px 0;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        width: 100%;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    table th,
+    table td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    table th {
+        background-color: #f2f2f2;
+        color: #555;
+    }
+
+    table td {
+        background-color: #fff;
+    }
+
+    table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tfoot {
+        font-weight: bold;
+        background-color: #f2f2f2;
+    }
+
+    .form-control[type="date"] {
+        max-width: 250px;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-top: 15px;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    #print-button {
+        background-color: #007bff;
+        margin-top: 20px;
+        font-size: 16px;
+    }
+
+    #print-button:hover {
+        background-color: #0056b3;
+    }
+    #general-ledger h2{
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
+    .somity-info > * {
+        margin: 10px 0;
+    }
+    @media print {
+        .no-print {
+            display: none;
+        }
+    }
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div id="general-ledger">
+
+    <div style="text-align: center" class="somity-info">
+        <h2>আশারা প্রকল্প</h2>
+        <h4>সুদমুক্ত বাণিজ্যিক প্রকল্প</h4>
+        <span style="background: black;color: white;padding: 5px 15px;border-radius: 50px;">স্থায়ী কার্যালয়</span>
+        <p>নদীপার, খিলগাঁও, ঢাকা-১২১৯</p>
+    </div>
+
+    <h2 style="text-align: center; margin-top: 50px;">General Ledger</h2>
+
+    <form method="GET">
+        {{ form.as_p }}
+
+        <p><button type="submit" class="no-print">Filter</button></p>
+        
+    </form>
+
+
+
+
+<div class="table-responsive">
+<table border="1">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Account</th>
+            <th>Source</th>
+            <th>Debit</th>
+            <th>Credit</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.date|date:"Y-m-d" }}</td>
+                {% if transaction.source == "Bank Account" %}
+                    <td>{{ transaction.bank.bank_name }}</td>
+                    <td>{{ transaction.bank.account_no }}</td>
+                {% elif transaction.source == "Voucher" %}
+                    <td>{{ transaction.voucher.voucher_name }}</td>
+                    <td>আশারা প্রকল্প</td>
+                {% elif transaction.source == "Share Account" or "General Account" or "DPS Account" or "Savings Account" %}
+                    <td>{{ transaction.account.customer.customer_name }}</td>
+                    <td>{{ transaction.account.customer.account_number }}</td>
+                {% endif %}
+                <td>{{ transaction.source }}</td>
+                <td>
+                    {% if transaction.asset_type == "debit" %}
+                        {{ transaction.amount|floatformat:2|intcomma }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if transaction.asset_type == "credit" %}
+                        {{ transaction.amount|floatformat:2|intcomma }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5">No transactions found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="4">Total</th>
+            <th>{{ total_deposit|default:0|floatformat:2|intcomma }}</th>
+            <th>{{ total_withdraw|default:0|floatformat:2|intcomma }}</th>
+        </tr>
+        <tr>
+            <th colspan="4">Net Asset</th>
+            <th colspan="2">{{ net_balance }}</th>
+        </tr>
+    </tfoot>
+</table>
+</div>
+</div>
+<button id="print-button" onclick="printDiv('general-ledger')">Print</button>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function printDiv(divId) {
+        var printContent = document.getElementById(divId).innerHTML;
+        var originalContent = document.body.innerHTML;
+
+        document.body.innerHTML = printContent;
+
+        window.print();
+
+        document.body.innerHTML = originalContent;
+    }
+</script>
+{% endblock %}

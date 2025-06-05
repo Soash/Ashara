@@ -1,0 +1,148 @@
+<!-- templates/bank_transaction.html -->
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}Bank AC{% endblock %}
+{% block style_links %}
+<style>
+    .main {
+
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    form p {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+        width: 100%;
+        padding: 8px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+    table th,
+    table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    table th {
+        background-color: #f2f2f2;
+        color: #333;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    table tr:hover {
+        background-color: #f1f1f1;
+    }
+    /* FontAwesome icons (basic inline styles since external fa link is removed) */
+    .fa-solid {
+        font-style: normal;
+        font-weight: bold;
+    }
+    .fa-plus{
+        color: green;
+    }
+    .fa-minus{
+        color: red;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+    <h2>Bank Transaction Entry</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+    <br><br><br>
+    <h2>Transaction History</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Bank</th>
+                <th>Account No</th>
+                <th>Transaction Type</th>
+                <th>Date</th>
+                <th>Note</th>
+                <th>Amount</th>
+                {% comment %} <th>Balance</th> {% endcomment %}
+                <th>Voucher ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.bank.bank_name }}</td>
+                    <td>{{ transaction.bank.account_no }}</td>
+                    <td>{{ transaction.get_transaction_type_display }}</td>
+                    <td>{{ transaction.date|date:"Y-m-d" }}</td>
+                    <td>{{ transaction.note|default:"" }}</td>
+                    <td>
+                        {% if transaction.transaction_type == 'deposit' %}
+                            <i class="fa-solid fa-plus"></i>
+                        {% else %}
+                            <i class="fa-solid fa-minus"></i>
+                        {% endif %}
+                        {{ transaction.amount }}
+                    </td>
+                    {% comment %} <td>{{ transaction.bank.balance }}</td> {% endcomment %}
+                    <td>{{ transaction.VoucherID }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6">No transactions found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+

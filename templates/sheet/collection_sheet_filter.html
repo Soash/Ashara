@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block title %}{% trans "Collection Sheet" %}{% endblock %}
+{% block style_links %}
+{% endblock %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <label for="date">{% trans "Date" %}:</label>
+    <input type="date" name="date" id="date">
+
+    <button type="submit">{% trans "Submit" %}</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

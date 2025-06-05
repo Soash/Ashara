@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}DPS AC {{transaction_type}}{% endblock %}
+{% block style_links %}
+<link rel="stylesheet" href="{% static 'app1/general.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <h1>DPS AC {{transaction_type}}</h1>
+
+    <div class="table-container1" style="display: flex; gap: 25px; margin: 20px 0;">
+
+        <table>
+            <tr>
+                <td>DPS Scheme</td>
+                <td>{{ dps.dps_scheme }}</td>
+            </tr>
+            <tr>
+                <td>Account No</td>
+                <td>{{ dps.customer.account_number }}</td>
+            </tr>
+            <tr>
+                <td>Customer Name</td>
+                <td>{{ dps.customer.customer_name }}</td>
+            </tr>
+            <tr>
+                <td>Start Date</td>
+                <td>{{ dps.start_date }}</td>
+            </tr>
+            <tr>
+                <td>End Date</td>
+                <td>{{ dps.end_date }}</td>
+            </tr>
+            <tr>
+                <td>Profit</td>
+                <td>{{ dps.profit_percent }}%</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>Installments</td>
+                <td>{{dps.paid_installments}}/{{ dps.number_of_installments }}</td>
+            </tr>
+            <tr>
+                <td>Installment Amount</td>
+                <td>{{ dps.amount_per_installments }}</td>
+            </tr>
+            <tr>
+                <td>Total Amount</td>
+                <td>{{ dps.total_amount }}</td>
+            </tr>
+            <tr>
+                <td>Balance</td>
+                <td>{{ dps.balance }}</td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td>{{ dps.get_status_display }}</td>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+    </div>
+    
+
+    <div class="div2">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+
+{% endblock %}

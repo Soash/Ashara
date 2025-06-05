@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Edit Customer{% endblock %}
+{% block style_links %}
+<link rel="stylesheet" href="{% static 'app1/customer_add2.css' %}">
+<style>
+.main{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+    <div class="header">
+
+        <div class="info" style="text-align: center;">
+            <h2 style="border: none; color: black;">আশারা প্রকল্প</h2>
+            <h4>সুদমুক্ত বাণিজ্যিক প্রকল্প</h4>
+            <h4 style="background: black;color: white;padding: 5px;border-radius: 50px;">স্থায়ী কার্যালয়</h4>
+            <p>নদীপার, খিলগাঁও, ঢাকা-১২১৯</p>
+        </div>
+
+        <div class="uploader uploader1-pos">
+            
+            <input type="file" name="customer_photo" onchange="previewImage(event, 'preview', 'placeholder1')">
+            
+            {% if customer.customer_photo %}
+            <img src="{{ customer.customer_photo.url }}" id="preview" style="display: block;">
+            {% else %}
+                <p id="placeholder1">ছবি</p>
+                <img id="preview" style="display:none;">
+            {% endif %}
+ 
+        </div>
+
+    </div>
+
+    <div class="form-section mt-4">
+        <h3 class="text-center mb-4 text-decoration-underline">সদস্য ফরম</h3>
+        
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">তারিখঃ</label>
+                {{ form.joining_date }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">হিসাব নংঃ</label>
+                {{ form.account_number }}
+            </div>
+        </div>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">সদস্যের নামঃ</label>
+                {{ form.customer_name }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">সদস্যের মোবাইল নংঃ</label>
+                {{ form.customer_mobile }}
+            </div>
+           
+        </div>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">পিতার নামঃ</label>
+                {{ form.customer_father }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">মাতার নামঃ</label>
+                {{ form.customer_mother }}
+            </div>
+   
+        </div>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">বর্তমান ঠিকানাঃ</label>
+                {{ form.customer_current_address }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">স্থায়ী ঠিকানাঃ</label>
+                {{ form.customer_permanent_address }}
+            </div>
+            
+        </div>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">জাতীয় পরিচয়পত্র / জন্মনিবন্ধন নাম্বারঃ</label>
+                {{ form.customer_nid }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">শেয়ার সংখ্যাঃ</label>
+                {{ form.share_count }}
+            </div>
+        </div>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">মাধ্যমকারীর নামঃ</label>
+                {{ form.mediator_name }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">শুপারিশকারীর নামঃ</label>
+                {{ form.recommender_name }}
+            </div>
+        </div>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">শুপারিশকারীর সম্পর্কঃ</label>
+                {{ form.recommender_relation }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">শুপারিশকারীর মোবাইল নংঃ</label>
+                {{ form.recommender_mobile }}
+            </div>
+        </div>
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">সদস্যের স্বাক্ষরঃ</label>
+                {{ form.customer_signature }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">শুপারিশকারীর স্বাক্ষরঃ</label>
+                {{ form.recommender_signature }}
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-section">
+        <h3 class="text-center mb-4 text-decoration-underline">নমিনীর পরিচিতি</h3>
+        <div class="row g-3 mt-2">
+            <div class="col">
+                <div class="form-label mt-2">
+                    <label>নমিনীর নামঃ</label>
+                    {{ form.nominee_name }}
+                </div>
+                <div class="form-label mt-2">
+                    <label>পিতার নামঃ</label>
+                    {{ form.nominee_father }}
+                </div>
+                <div class="form-label mt-2">
+                    <label>মাতার নামঃ</label>
+                    {{ form.nominee_mother }}
+                </div>
+                <div class="form-label mt-2">
+                    <label>সদস্যের সাথে সম্পর্কঃ</label>
+                    {{ form.nominee_relation }}
+                </div>
+                <div class="form-label mt-2">
+                    <label>বর্তমান ঠিকানাঃ</label>
+                    {{ form.nominee_current_address }}
+                </div>
+                <div class="form-label mt-2">
+                    <label>স্থায়ী ঠিকানাঃ</label>
+                    {{ form.nominee_permanent_address }}
+                </div>
+                <div class="form-label mt-2">
+                    <label>মোবাইল নংঃ</label>
+                    {{ form.nominee_mobile }}
+                </div>
+                <div class="form-label mt-2">
+                    <label>জাতীয় পরিচয়পত্র / জন্মনিবন্ধন নাম্বারঃ</label>
+                    {{ form.nominee_nid }}
+                </div>
+            </div>
+            <div class="col nomini-photo">
+                <div class="uploader">
+               
+                    <input type="file" name="nominee_photo" onchange="previewImage(event, 'preview2', 'placeholder2')">
+            
+                    {% if customer.nominee_photo %}
+                    <img src="{{ customer.nominee_photo.url }}" id="preview2" style="display: block;">
+                    {% else %}
+                        <p id="placeholder2">ছবি</p>
+                        <img id="preview2" style="display:none;">
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">নমিনীর স্বাক্ষরঃ</label>
+                {{ form.nominee_signature }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">সভাপতির স্বাক্ষরঃ</label>
+                {{ form.president_signature }}
+            </div>
+        </div>
+    </div>
+    <div style="text-align: center;margin: 20px;">
+        <button type="submit" style="padding: 10px;">জমা দিন</button>
+    </div>
+    
+</form>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+        function previewImage(event, previewId, placeholderId) {
+            const input = event.target;
+            const preview = document.getElementById(previewId);
+            const placeholder = document.getElementById(placeholderId);
+    
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+    
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                    placeholder.style.display = "none";
+                };
+    
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+{% endblock %}

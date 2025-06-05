@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'report/styles.css' %}">
+    <title>Voucher Report</title>
+</head>
+<body>
+
+    <div style="text-align: center">
+        <h2>আশারা প্রকল্প</h2>
+        <h4>সুদমুক্ত বাণিজ্যিক প্রকল্প</h4>
+        <span style="background: black;color: white;padding: 5px 15px;border-radius: 50px;">স্থায়ী কার্যালয়</span>
+        <p>নদীপার, খিলগাঁও, ঢাকা-১২১৯</p>
+    </div>
+    
+    <br><br>
+    <span><b>Voucher Report</b></span><br>
+    <span><b>Category: </b>{{voucher_category}}</span><br>
+    <span><b>Start Date: </b>{{start_date}}</span><br>
+    <span><b>End Date: </b>{{end_date}}</span>
+    <div class="container">   
+        {% if entries %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>SL</th>
+                    <th>Date</th>
+                    {% comment %} <th>TrxID</th> {% endcomment %}
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ entry.date|date:"Y-m-d" }}</td>
+                    {% comment %} <td>{{ entry.VoucherID }}</td> {% endcomment %}
+                    <td>{{ entry.voucher.voucher_name }}</td>
+                    <td>{{ entry.amount }}</td>
+                    <td>{{ entry.note|default:"" }}</td>            
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" style="text-align: right;">Grand Total:</td>
+                    <td>{{ totals.total_amount|floatformat:"2" }}</td>
+                </tr>
+            </tfoot>
+        </table>
+        {% else %}
+        <p>No records found.</p>
+        {% endif %}
+    </div>
+
+    <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+        <p>Prepared by: _____________________</p>
+        <p>Approved by: _____________________</p>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;" class="no-print">
+        <button onclick="window.history.back();">Go Back</button>
+        <button onclick="window.print();">Print</button>
+        <button onclick="window.location.href='{% url 'home' %}';">Home</button>
+    </div>
+</body>
+</html>

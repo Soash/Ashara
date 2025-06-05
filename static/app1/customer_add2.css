@@ -1,0 +1,190 @@
+
+.signature-box {
+    width: 150px;
+    border-top: 1px solid black;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.inline-group {
+	display: flex;
+    flex-direction: column;
+	gap: 10px;
+
+}
+
+
+.header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-top: 30px;
+}
+
+.uploader {
+    width: 150px;
+    height: 150px;
+    border: 2px solid #000000;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+}
+.uploader1-pos{
+    margin-top: -120px;
+    margin-left: 750px;
+}
+
+
+.uploader img{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    display: none;
+}
+
+.uploader input{
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.uploader p{
+    color: #888;
+    font-size: 16px;
+}
+
+
+
+
+
+
+.info h2, .info h4, .info h5, .info p {
+    margin: 5px 0;
+}
+
+
+.form-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+    margin-top: 20px;
+}
+
+h3 {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.form-label {
+    display: block; /* Ensures label takes full width */
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+
+input[type="text"], input[type="date"], input[type="file"], textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+    display: block;
+}
+
+input[type="text"]:focus, input[type="date"]:focus, input[type="file"]:focus {
+    border-color: #007bff;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.col-md-6, .col {
+    flex: 1;
+    min-width: 300px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-2 {
+    margin-top: 10px;
+}
+
+.mt-4 {
+    margin-top: 20px;
+}
+
+.mb-4 {
+    margin-bottom: 20px;
+}
+
+.g-3 {
+    gap: 15px;
+}
+
+.nomini-photo{
+    justify-content: center;
+    display: flex;
+    margin-top: 50px;
+}
+
+
+@media (max-width: 700px) {
+    .nomini-photo{
+        margin-top: 0px;
+    }
+    
+}
+
+
+
+
+@media (max-width: 800px) {
+    .header {
+        flex-direction: column;
+    }
+
+    .uploader {
+        position: static;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 1250px) {
+    .uploader1-pos{
+        margin-top: 20px;
+        margin-left: 0px;
+    }
+}
+
+@media (max-width: 400px) {
+    .form-label {
+        display: block; /* Labels and inputs remain on separate lines */
+        text-align: left;
+    }
+    .col-md-6, .col {
+        min-width: 100%;
+    }
+
+    .uploader, .uploader2 {
+        width: 100%;
+    }
+}

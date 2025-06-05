@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load collection_sheet_tags %}
+    {% load i18n %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+        .text-center{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div style="text-align: center">
+        <h2>আশারা প্রকল্প</h2>
+        <h4>সুদমুক্ত বাণিজ্যিক প্রকল্প</h4>
+        <span style="background: black;color: white;padding: 5px 15px;border-radius: 50px;">স্থায়ী কার্যালয়</span>
+        <p>নদীপার, খিলগাঁও, ঢাকা-১২১৯</p>
+    </div>
+
+    {% comment %} <form method="post">
+        {% csrf_token %}
+        <label for="date">{% trans "Date" %}:</label>
+        <input type="date" name="date" id="date">
+    
+        <button type="submit">{% trans "Submit" %}</button>
+    </form> {% endcomment %}
+
+
+{% if customers %}
+<h3>Collection Sheet</h3>
+<table>
+    <thead>
+        <tr>
+            <td rowspan="2">SL</td>
+            <td rowspan="2">Account No</td>
+            <td rowspan="2">Customer Name</td>
+            <td colspan="3" class="text-center">General AC</td>
+            <td colspan="3" class="text-center">Savings AC</td>
+            <td colspan="3" class="text-center">DPS AC</td>
+            <td colspan="3" class="text-center">Share AC</td>
+        </tr>
+        <tr>
+            <td>Balance</td>
+            <td>Withdraw</td>
+            <td>Deposit</td>
+
+            <td>Balance</td>
+            <td>Withdraw</td>
+            <td>Deposit</td>
+
+            <td>Balance</td>
+            <td>Withdraw</td>
+            <td>Deposit</td>
+
+            <td>Balance</td>
+            <td>Withdraw</td>
+            <td>Deposit</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for customer in customers %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ customer.account_number }}</td>
+                <td>{{ customer.customer_name }}</td>
+
+                <td>{% customer_balance customer %}</td>
+                <td>{% customer_withdraw customer %}</td>
+                <td>{% customer_deposit customer %}</td>
+
+                <td>{% savings_balance customer %}</td>
+                <td>{% savings_withdraw customer %}</td>
+                <td>{% savings_deposit customer %}</td>
+
+
+                <td>{% dps_balance customer %}</td>
+                <td>{% dps_withdraw customer %}</td>
+                <td>{% dps_deposit customer %}</td>
+
+                <td>{% share_balance customer %}</td>
+                <td>{% share_withdraw customer %}</td>
+                <td>{% share_deposit customer %}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">Total</td>
+            <td>{% total_customer_balance customers %}</td>
+            <td>{% total_customer_withdraw customers %}</td>
+            <td>{% total_customer_deposit customers %}</td>
+
+
+            <td>{% total_savings_balance customers %}</td>
+            <td>{% total_savings_withdraw customers %}</td>
+            <td>{% total_savings_deposit customers %}</td>
+    
+ 
+            <td>{% total_dps_balance customers %}</td>
+            <td>{% total_dps_withdraw customers %}</td>
+            <td>{% total_dps_deposit customers %}</td>
+ 
+            <td>{% total_share_balance customers %}</td>
+            <td>{% total_share_withdraw customers %}</td>
+            <td>{% total_share_deposit customers %}</td>
+        </tr>
+    </tfoot>
+
+
+</table>
+
+{% endif %}
+
+<div style="margin-top: 20px;display: flex;justify-content: space-between;">
+    <p>Prepared by: _____________________</p>
+    <p>Approved by: _____________________</p>
+</div>
+
+<div style="text-align: center; margin-top: 20px;" class="no-print">
+    <button onclick="window.history.back();">Go Back</button>
+    <button onclick="window.print();">Print</button>
+    <button onclick="window.location.href='{% url 'home' %}';">home</button>
+</div>
+</body>
+</html>
+

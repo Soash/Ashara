@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Share AC List{% endblock %}
+{% block style_links %}
+<link rel="stylesheet" href="{% static 'app1/customer_list.css' %}">
+<style>
+    .main{
+        width: 85%;
+    }
+    th{
+        background-color: var(--primary-color);
+        color: white;
+        
+    }
+    td{
+        text-align: center;
+    }
+    table.dataTable > thead > tr > th, table.dataTable > thead > tr > td {
+        text-align: center;
+    }
+    .trans-btn {
+        color: white;
+        text-decoration: none;
+        padding: 3px 10px;
+        margin: 3px;
+        display: inline-block;
+        border-radius: 25px;
+    }
+    .deposit-btn {
+        background: green;
+    }
+    .withdraw-btn {
+        background: red;
+    }
+    .trans-his-btn {
+        background: black;
+    }
+</style>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.3/css/dataTables.dataTables.css">
+{% endblock %}
+
+{% block content %}
+
+    <h2>Share AC List</h2>
+    
+    <div class="table-container">
+        <table id="myTable" class="display" style="width:100%">
+            <thead>
+                <tr>
+              
+                    <th>Account No</th>
+                    <th>Share ID</th>
+                    <th>Action</th>
+                    <th>Customer Name</th>
+                    <th>Nominee</th>
+                    <th>Deposit</th>
+                    <th>Withdraw</th>
+                    <th>Balance</th>
+                    <th>Profit</th>
+                    <th>Profit Withdraw</th>
+                    <th>Profit Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for share in customers %}
+                    <tr>
+                        <td>{{ share.customer.account_number }}</td>
+                        <td>{{ share.share_id }}</td>
+                        <td>
+                            <a href="{% url 'share_deposit' share.share_id %}" class="trans-btn deposit-btn">Deposit</a> <br> 
+                            <a href="{% url 'share_withdraw' share.share_id %}" class="trans-btn withdraw-btn">Withdraw</a> <br>
+                            {% comment %} <a href="{% url 'share_transfer' share.share_id %}">Transfer</a> <br> {% endcomment %}
+                            {% comment %} <a href="{% url 'share_profit_withdraw' share.share_id %}">Profit Withdraw</a> <br> {% endcomment %}
+                            <a href="{% url 'share_transaction_history' share.share_id %}" class="trans-btn trans-his-btn">Transactions</a>
+                        </td>
+                        
+                        <td>{{ share.customer.customer_name }}</td>
+                        <td>{{ share.nominee }}</td>
+                        <td>{{ share.deposit }}</td>
+                        <td>{{ share.withdraw }}</td>
+                        <td>{{ share.balance }}</td>
+                        <td>{{ share.get_profit }}</td>
+                        <td>{{ share.profit_withdraw }}</td>
+                        <td>{{ share.profit_balance }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.1.3/js/dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable();
+        });
+    </script>
+{% endblock %}
