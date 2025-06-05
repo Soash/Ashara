@@ -1,5 +1,4 @@
 .env
-db.sqlite3
 info.txt
 debug.log
 __pycache__/
